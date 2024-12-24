@@ -40,7 +40,7 @@ public class JDBCUtil {
     }
 
     /**
-     * Sets the parameters for a PreparedStatement.
+     * Sets the parameters for a PreparedStatement based on their SQL types.
      *
      * @param pstmt      The PreparedStatement
      * @param parameters A map of parameter index to SqlParameter objects
@@ -50,10 +50,54 @@ public class JDBCUtil {
         for (Map.Entry<Integer, SqlParameter> entry : parameters.entrySet()) {
             int index = entry.getKey();
             SqlParameter param = entry.getValue();
+
             if (param.getValue() == null) {
                 pstmt.setNull(index, param.getType());
             } else {
-                pstmt.setObject(index, param.getValue(), param.getType());
+                switch (param.getType()) {
+                    case Types.INTEGER:
+                        pstmt.setInt(index, (Integer) param.getValue());
+                        break;
+                    case Types.BIGINT:
+                        pstmt.setLong(index, (Long) param.getValue());
+                        break;
+                    case Types.FLOAT:
+                    case Types.REAL:
+                        pstmt.setFloat(index, (Float) param.getValue());
+                        break;
+                    case Types.DOUBLE:
+                        pstmt.setDouble(index, (Double) param.getValue());
+                        break;
+                    case Types.VARCHAR:
+                    case Types.CHAR:
+                    case Types.LONGVARCHAR:
+                        pstmt.setString(index, (String) param.getValue());
+                        break;
+                    case Types.BOOLEAN:
+                        pstmt.setBoolean(index, (Boolean) param.getValue());
+                        break;
+                    case Types.DATE:
+                        pstmt.setDate(index, (Date) param.getValue());
+                        break;
+                    case Types.TIMESTAMP:
+                        pstmt.setTimestamp(index, (Timestamp) param.getValue());
+                        break;
+                    case Types.TIME:
+                        pstmt.setTime(index, (Time) param.getValue());
+                        break;
+                    case Types.BLOB:
+                        pstmt.setBlob(index, (Blob) param.getValue());
+                        break;
+                    case Types.CLOB:
+                        pstmt.setClob(index, (Clob) param.getValue());
+                        break;
+                    case Types.ARRAY:
+                        pstmt.setArray(index, (Array) param.getValue());
+                        break;
+                    default:
+                        pstmt.setObject(index, param.getValue(), param.getType());
+                        break;
+                }
             }
         }
     }
