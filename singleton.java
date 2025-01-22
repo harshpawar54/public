@@ -131,3 +131,33 @@ public class DatabaseCredentialStore {
         }
     }
 }
+public class Main {
+    public static void main(String[] args) {
+        // Get the singleton instance
+        DatabaseCredentialStore credentialStore = DatabaseCredentialStore.getInstance();
+
+        // Create credentials
+        DatabaseCredentialStore.DatabaseCredentials credentials1 =
+                new DatabaseCredentialStore.DatabaseCredentials("user1", "password1");
+
+        DatabaseCredentialStore.DatabaseCredentials credentials2 =
+                new DatabaseCredentialStore.DatabaseCredentials("user2", "password2");
+
+        // Add credentials for hostnames
+        credentialStore.addCredentials("db1.example.com", credentials1);
+        credentialStore.addCredentials("db2.example.com", credentials2);
+
+        // Retrieve and print credentials for a hostname
+        DatabaseCredentialStore.DatabaseCredentials db1Credentials =
+                credentialStore.getCredentials("db1.example.com");
+
+        System.out.println("Credentials for db1.example.com: " + db1Credentials);
+
+        // Check if credentials exist
+        System.out.println("Has credentials for db2.example.com? " +
+                           credentialStore.hasCredentials("db2.example.com"));
+
+        System.out.println("Has credentials for db3.example.com? " +
+                           credentialStore.hasCredentials("db3.example.com"));
+    }
+}
