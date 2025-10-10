@@ -221,3 +221,8 @@ class PolicyRecord {
     public List<Map<String, String>> getChildRows() { return childRows; }
     public void setChildRows(List<Map<String, String>> c) { childRows = c; }
 }
+
+
+RoleName,RoleDescription,PolicyName,AppInstanceKey,ParentKeyValuePairs,ChildFormName,ChildRows
+Role-Admin,Administrator role,Policy-001,12345,UD_APP_FIELD1=ON;UD_APP_FIELD2=Active,UD_CHILD,[UD_CHILD_NAME=RoleA;UD_CHILD_STATUS=Active]|[UD_CHILD_NAME=RoleB;UD_CHILD_STATUS=Inactive]
+Role-Viewer,Viewer role,Policy-002,12346,UD_APP_FIELD1=READ_ONLY;UD_APP_FIELD3=Yes,UD_CHILD,[UD_CHILD_NAME=RoleC;UD_CHILD_STATUS=Active]
