@@ -31,3 +31,28 @@ private static void safeUpdatePolicy(AccessPolicyService svc, AccessPolicy polic
     }
     svc.updateAccessPolicy(policy);
 }
+
+
+import oracle.iam.accesspolicy.api.AccessPolicyService;
+import oracle.iam.accesspolicy.vo.AccessPolicy;
+import oracle.iam.platform.Platform;
+import java.util.Base64;
+
+AccessPolicyService svc = Platform.getService(AccessPolicyService.class);
+AccessPolicy policy = svc.getAccessPolicyDetails(policyKey);
+
+// Fix the rowVer serialization issue
+try {
+    Object rv = policy.getRowVer();
+    if (rv instanceof String) {
+        // Decode base64 string to get raw bytes, then re-encode back as base64 string
+        byte[] decoded = Base64.getDecoder().decode((String) rv);
+        String base64RowVer = Base64.getEncoder().encodeToString(decoded);
+        policy.setRowVer(base64RowVer);
+    }
+} catch (Exception e) {
+    System.out.println("RowVer conversion skipped: " + e.getMessage());
+}
+
+policy.setDescription("Updated policy via Platform service");
+svc.updateAccessPolicy(policy);
